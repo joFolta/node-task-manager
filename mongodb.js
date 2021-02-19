@@ -5,10 +5,6 @@ const { MongoClient, ObjectID } = require("mongodb");
 const connectionURL = "mongodb://127.0.0.1:27017";
 const databaseName = "task-manager";
 
-const id = new ObjectID();
-console.log(id.id.length);
-console.log(id.toHexString().length);
-
 MongoClient.connect(
   connectionURL,
   { useNewUrlParser: true },
@@ -19,56 +15,27 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    // db.collection("users").insertOne(
-    //   {
-    //     name: "Vikram123123",
-    //     age: 99,
-    //   },
-    //   (error, result) => {
+    // db.collection("users").findOne(
+    //   { _id: new ObjectID("602fc6237132f05a6c46b837") },
+    //   (error, user) => {
     //     if (error) {
-    //       return console.log("Unable to insert user");
+    //       return console.log("Unable to fetch");
     //     }
 
-    //     console.log(result.ops);
+    //     console.log(user);
     //   }
     // );
 
-    // db.collection("users").insertMany(
-    //   [
-    //     {
-    //       name: "Jen",
-    //       age: 28,
-    //     },
-    //     {
-    //       name: "Emilio",
-    //       age: 21,
-    //     },
-    //   ],
-    //   (error, result) => {
-    //     if (error) {
-    //       return console.log("Unable to insert documents!");
-    //     }
+    db.collection("users")
+      .find({ age: 99 })
+      .toArray((error, users) => {
+        console.log(users);
+      });
 
-    //     console.log(result.ops);
-    //   }
-    // );
-
-    // db.collection("tasks").insertMany(
-    //   [
-    //     { description: "Clean bathroom", completed: true },
-    //     {
-    //       description: "Complete tutorial",
-    //       completed: false,
-    //     },
-    //     { description: "Eat breakfast", completed: false },
-    //   ],
-    //   (error, result) => {
-    //     if (error) {
-    //       return console.log("Unable to insert documents!");
-    //     }
-
-    //     console.log(result.ops);
-    //   }
-    // );
+    db.collection("users")
+      .find({ age: 99 })
+      .count((error, count) => {
+        console.log(count);
+      });
   }
 );
