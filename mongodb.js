@@ -1,10 +1,13 @@
 // CRUD create read update delete
 
-const mongodb = require("mongodb");
-const MongoClient = mongodb.MongoClient;
+const { MongoClient, ObjectID } = require("mongodb");
 
 const connectionURL = "mongodb://127.0.0.1:27017";
 const databaseName = "task-manager";
+
+const id = new ObjectID();
+console.log(id.id.length);
+console.log(id.toHexString().length);
 
 MongoClient.connect(
   connectionURL,
@@ -15,10 +18,11 @@ MongoClient.connect(
     }
 
     const db = client.db(databaseName);
+
     // db.collection("users").insertOne(
     //   {
-    //     name: "Josh",
-    //     age: 42,
+    //     name: "Vikram123123",
+    //     age: 99,
     //   },
     //   (error, result) => {
     //     if (error) {
@@ -49,22 +53,22 @@ MongoClient.connect(
     //   }
     // );
 
-    db.collection("tasks").insertMany(
-      [
-        { description: "Clean bathroom", completed: true },
-        {
-          description: "Complete tutorial",
-          completed: false,
-        },
-        { description: "Eat breakfast", completed: false },
-      ],
-      (error, result) => {
-        if (error) {
-          return console.log("Unable to insert documents!");
-        }
+    // db.collection("tasks").insertMany(
+    //   [
+    //     { description: "Clean bathroom", completed: true },
+    //     {
+    //       description: "Complete tutorial",
+    //       completed: false,
+    //     },
+    //     { description: "Eat breakfast", completed: false },
+    //   ],
+    //   (error, result) => {
+    //     if (error) {
+    //       return console.log("Unable to insert documents!");
+    //     }
 
-        console.log(result.ops);
-      }
-    );
+    //     console.log(result.ops);
+    //   }
+    // );
   }
 );
