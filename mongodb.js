@@ -16,24 +16,9 @@ MongoClient.connect(
     const db = client.db(databaseName);
 
     db.collection("tasks")
-      // .updateOne(
-      //   {
-      //     _id: new ObjectID("602fbe7f974651529d755b3d"),
-      //   },
-      //   {
-      //     $inc: {
-      //       age: 1,
-      //     },
-      //   }
-      // )
-      .updateMany(
-        { completed: false },
-        {
-          $set: {
-            completed: true,
-          },
-        }
-      )
+      .deleteOne({
+        description: "Eat breakfast",
+      })
       .then((result) => {
         console.log(result);
       })
