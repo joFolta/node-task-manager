@@ -14,14 +14,38 @@ const User = mongoose.model("User", {
   },
 });
 
-const me = new User({
-  name: "Andrew",
-  age: "Mike",
+// const me = new User({
+//   name: "Andrew",
+//   age: "Mike",
+// });
+
+// me.save()
+//   .then(() => {
+//     console.log(me);
+//   })
+//   .catch((error) => {
+//     console.log("Error!", error);
+//   });
+
+const Task = mongoose.model("Task", {
+  // mongoose auto-annoyingly pluralizes and lowcases "Task" model to "tasks" collection
+  description: {
+    type: String,
+  },
+  completed: {
+    type: Boolean,
+  },
 });
 
-me.save()
-  .then(() => {
-    console.log(me);
+const homework = new Task({
+  description: "Finish Calculus Exersizes 15-25",
+  completed: true,
+});
+
+homework
+  .save()
+  .then((result) => {
+    console.log(result);
   })
   .catch((error) => {
     console.log("Error!", error);
