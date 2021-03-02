@@ -32,41 +32,56 @@ const User = mongoose.model("User", {
       }
     },
   },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 7,
+    validate(value) {
+      if (value.toLowerCase().includes("password")) {
+        throw new Error("Password cannot include 'password'");
+      }
+    },
+  },
 });
 
-const me = new User({
-  name: "  Andrew       ",
-  email: "great@email.co.kr    ",
-});
-
-me.save()
-  .then(() => {
-    console.log(me);
-  })
-  .catch((error) => {
-    console.log("Error!", error);
-  });
-
-// const Task = mongoose.model("Task", {
-//   // mongoose auto-annoyingly pluralizes and lowcases "Task" model to "tasks" collection
-//   description: {
-//     type: String,
-//   },
-//   completed: {
-//     type: Boolean,
-//   },
+// const me = new User({
+//   name: "  Andrew       ",
+//   email: "great@email.co.kr    ",
+//   password: "  1234567",
 // });
 
-// const homework = new Task({
-//   description: "Finish Calculus Exersizes 15-25",
-//   completed: true,
-// });
-
-// homework
-//   .save()
-//   .then((result) => {
-//     console.log(result);
+// me.save()
+//   .then(() => {
+//     console.log(me);
 //   })
 //   .catch((error) => {
 //     console.log("Error!", error);
 //   });
+
+const Task = mongoose.model("Task", {
+  // mongoose auto-annoyingly pluralizes and lowcases "Task" model to "tasks" collection
+  description: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const homework = new Task({
+  description: "   Blah   ",
+  completed: true,
+});
+
+homework
+  .save()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log("Error!", error);
+  });
