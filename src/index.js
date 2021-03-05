@@ -21,6 +21,36 @@ app.post("/users", (req, res) => {
     });
 });
 
+app.get("/users", (req, res) => {
+  // https://mongoosejs.com/docs/queries.html#queries:~:text=Model.find()
+  User.find({})
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+});
+
+app.get("/users/:id", (req, res) => {
+  // console.log(req.params); // if request is "localhost:3000/users/12234567", console.logs { id: '12234567' }
+  const _id = req.params.id;
+
+  // https://mongoosejs.com/docs/api.html#model_Model.findById
+  User.findById(_id) // mongoose automatically converts ObjectId to string Id
+    .then((user) => {
+      // TODO REMOVE LOG
+      console.log(user);
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    })
+    .catch((e) => {
+      res.status(500).send();
+    });
+});
+
 app.post("/tasks", (req, res) => {
   const task = new Task(req.body);
 
