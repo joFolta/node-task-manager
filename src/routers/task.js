@@ -36,6 +36,7 @@ router.get("/tasks/:id", async (req, res) => {
   }
 });
 
+// don't use findByIdAndUpdate so we can utilize mongoose Middleware if later desired
 router.patch("/tasks/:id", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["description", "completed"];
@@ -49,10 +50,20 @@ router.patch("/tasks/:id", async (req, res) => {
   }
 
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const task = await Task.findById(req.params.id);
+
+    updates.forEach(
+      (updateField) => (task[updateField] = req.body[updateField])
+    );
+    // where the models/users.js "save" Middleware, if implemented, would get executed
+    await task.save();
+
+    // findByIdAndUpdate BYPASSES mongoose (performs direct operation on the db)
+    // DOESN'T work with Middleware
+    // const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
 
     if (!task) {
       return res

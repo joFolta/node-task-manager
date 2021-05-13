@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcrypt");
 
-const User = mongoose.model("User", {
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -39,5 +40,23 @@ const User = mongoose.model("User", {
     },
   },
 });
+
+// Middleware to hash password before saving to db
+// https://mongoosejs.com/docs/middleware.html
+// "pre" happens before the "save"
+// we are using "save" for posting and patching users
+userSchema.pre("save", async function (next) {
+  // "this" would not be avail in arrow-function, but works with our normal function
+  const user = this;
+
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  // "next" called when done with async operation and then actualy "save"s the user
+  next();
+});
+
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
