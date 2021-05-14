@@ -14,6 +14,19 @@ router.post("/users", async (req, res) => {
   }
 });
 
+router.post("/users/login", async (req, res) => {
+  try {
+    // custom findByCredentials method
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    res.send(user);
+  } catch (e) {
+    res.status(400).send({ error: "Could not login" });
+  }
+});
+
 router.get("/users", async (req, res) => {
   try {
     const users = await User.find({}); // https://mongoosejs.com/docs/queries.html#queries:~:text=Model.find()
