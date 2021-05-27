@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -40,8 +41,29 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true
+      }
+    }
+  ]
 });
 
+// .methods is for instance methods
+userSchema.methods.generateAuthToken = async function () {
+  const user = this
+  const token = jwt.sign({_id: user._id.toString()}, 'secretToSignToken')
+
+  user.tokens = user.tokens.concat({ token })
+  await user.save()
+
+  return token;
+
+}
+
+// .statics is for models methods
 // custom findByCredentials method defined here
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
