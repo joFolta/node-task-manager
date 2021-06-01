@@ -6,9 +6,31 @@ const taskRouter = require("./routers/task");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// 
+// Without middleware:    new request -> run route handler
+// 
+// With middleware:       new request -> do something -> run route handler
+// 
+
+// Middleware function
+// - use send() to proceed to route handler step
+// app.use((req, res, next) => {
+//   if (req.method === "GET") {
+//     res.send('GET requests are disabled')
+//   } else {
+//     next()
+//   }
+// })
+
+// Middleware exercise - "Site Under Maintenance"
+app.use((req, res, next) => {
+  res.status(503).send({error: "Site under maintenance. Please try again later. "})
+})
+
 app.use(express.json()); // parses incoming JSON to an object
 app.use(userRouter); // allows use of another express.Router
 app.use(taskRouter);
+
 
 app.listen(port, () => {
   console.log("Server is up on port " + port);
