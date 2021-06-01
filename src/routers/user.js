@@ -1,6 +1,6 @@
 const express = require("express");
-const { update } = require("../models/user");
 const User = require("../models/user");
+const auth = require('../middleware/auth')
 const router = new express.Router();
 
 router.post("/users", async (req, res) => {
@@ -30,13 +30,11 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-router.get("/users", async (req, res) => {
-  try {
-    const users = await User.find({}); // https://mongoosejs.com/docs/queries.html#queries:~:text=Model.find()
-    res.send(users);
-  } catch (e) {
-    res.status(500).send();
-  }
+// NOTE: app.use() middleware in index.js causes it to run for all requests. We will now target the middleware to run only for specific methods in a given route. 
+// auth is the middleware used here
+// In Postman, send request header: "Authorization" : "Bearer {user's JWT}"
+router.get("/users/me", auth, async (req, res) => {
+  res.send(req.user)
 });
 
 router.get("/users/:id", async (req, res) => {

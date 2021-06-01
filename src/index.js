@@ -22,10 +22,12 @@ const port = process.env.PORT || 3000;
 //   }
 // })
 
-// Middleware exercise - "Site Under Maintenance"
-app.use((req, res, next) => {
-  res.status(503).send({error: "Site under maintenance. Please try again later. "})
-})
+// // Middleware exercise - "Site Under Maintenance"
+// app.use((req, res, next) => {
+//   res.status(503).send({error: "Site under maintenance. Please try again later. "})
+// })
+
+// NOTE: app.use() middleware in index.js causes it to run for all requests. We will now target the middleware to run only for specific methods in a given route. 
 
 app.use(express.json()); // parses incoming JSON to an object
 app.use(userRouter); // allows use of another express.Router
